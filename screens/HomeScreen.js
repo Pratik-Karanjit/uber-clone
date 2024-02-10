@@ -24,6 +24,7 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
+//Way of giving css in React Native
 const styles = StyleSheet.create({
   text: {
     color: "blue",
