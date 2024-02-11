@@ -8,6 +8,7 @@ const HomeScreen = () => {
     //SafeAreaView is used to render things inside of the visible region of phone
     <SafeAreaView style={tw`bg-white h-full`}>
       <View style={tw`p-5`}>
+        {/*Uber logo */}
         <Image
           style={{
             width: 100,
@@ -18,7 +19,6 @@ const HomeScreen = () => {
             uri: "https://links.papareact.com/gzs",
           }}
         />
-
         <NavOptions></NavOptions>
       </View>
     </SafeAreaView>
