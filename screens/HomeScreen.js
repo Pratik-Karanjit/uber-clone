@@ -1,40 +1,3 @@
-// import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
-// import React from "react";
-// import tw from "tailwind-react-native-classnames";
-// import NavOptions from "../components/NavOptions";
-
-// const HomeScreen = () => {
-//   return (
-//     //SafeAreaView is used to render things inside of the visible region of phone
-//     <SafeAreaView style={tw`bg-white h-full`}>
-//       <View style={tw`p-5`}>
-//         {/*Uber logo */}
-//         <Image
-//           style={{
-//             width: 100,
-//             height: 100,
-//             resizeMode: "contain",
-//           }}
-//           source={{
-//             uri: "https://links.papareact.com/gzs",
-//           }}
-//         />
-
-//         <NavOptions></NavOptions>
-//       </View>
-//     </SafeAreaView>
-//   );
-// };
-
-// export default HomeScreen;
-
-// //Way of giving css in React Native
-// const styles = StyleSheet.create({
-//   text: {
-//     color: "blue",
-//   },
-// });
-
 import React, { useState } from "react";
 import {
   Text,
@@ -48,8 +11,12 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import NavOptions from "../components/NavOptions";
+import { useDispatch } from "react-redux";
+import { setDestination, setOrigin } from "../slices/navSlice.js";
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
   const [input, setInput] = useState("");
   const [data, setData] = useState([]);
 
@@ -122,7 +89,31 @@ const HomeScreen = () => {
             renderItem={({ item, index }) => (
               <Pressable
                 style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
-                onPress={() => alert("navigate passing" + JSON.stringify(item))}
+                // onPress={() => alert("navigate passing" + JSON.stringify(item))}
+                onPress={(data, details = null) => {
+                  console.log("locationX", data.nativeEvent.locationX);
+                  console.log("locationY", data.nativeEvent.locationY);
+                  console.log(item);
+                  const { lat, lon, display_place, display_address } = item;
+                  console.log("lat", lat);
+                  console.log("lon", lon);
+                  console.log("display Name", display_place);
+                  console.log("display Address", display_address);
+
+                  dispatch(
+                    setOrigin({
+                      location: { lat, lon },
+                      description: { display_place, display_address },
+                    })
+                  );
+                  dispatch(setDestination(null));
+                  // Log the dispatched actions
+                  console.log("Origin Dispatched:", {
+                    location: { lat, lon },
+                    description: { display_place, display_address },
+                  });
+                  console.log("Destination Dispatched:", null);
+                }}
               >
                 {getItemText(item)}
               </Pressable>
@@ -130,6 +121,7 @@ const HomeScreen = () => {
             keyExtractor={(item, index) => item.osm_id + index}
             showsVerticalScrollIndicator={false}
           />
+          <NavOptions />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
