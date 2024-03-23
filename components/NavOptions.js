@@ -3,6 +3,8 @@ import React from "react";
 import tw from "tailwind-react-native-classnames";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import { selectOrigin } from "../slices/navSlice";
+import { useSelector } from "react-redux";
 
 //Array of data that is later passed to FlatList
 //Assigning id for each element is crucial and screen attribute for help in navigating
@@ -23,6 +25,7 @@ const data = [
 
 const NavOptions = () => {
   let navigation = useNavigation();
+  const origin = useSelector(selectOrigin);
 
   return (
     //KeyExtractor is for assigning unique ID to each element
@@ -35,8 +38,11 @@ const NavOptions = () => {
         <TouchableOpacity
           onPress={() => navigation.navigate(item.screen)}
           style={tw`p-2 pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40`}
+          //Set it to disabled when origin is not set. That is pick up is not set.
+          disabled={!origin}
         >
-          <View>
+          {/* Similarly, set style conditionally if pick up is not entered. */}
+          <View style={tw`${!origin && "opacity-20"}`}>
             <Image
               style={{ width: 120, height: 120, resizeMode: "contain" }}
               source={{ uri: item.image }}
